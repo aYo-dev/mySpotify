@@ -1,12 +1,15 @@
-import React from 'react';
-import {View, Text} from 'react-native';
+import React, {ReactElement} from 'react';
+import {Searchbar} from 'react-native-paper';
 
-function LotsOfGreetings() {
+const SearchBar = (): ReactElement => {
   return (
-    <View>
-      <Text>Hello World!</Text>
-    </View>
+    <Searchbar
+      placeholder="Search"
+      onChangeText={() => console.log('search')}
+      value=""
+      icon="magnify"
+    />
   );
-}
+};
 
-export default LotsOfGreetings;
+export default SearchBar;
