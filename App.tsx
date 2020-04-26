@@ -9,14 +9,7 @@
  */
 
 import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {StyleSheet, ScrollView} from 'react-native';
 
 import {
   Header,
@@ -26,22 +19,26 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-import LotsOfGreetings from './components/Search';
+import {Provider as PaperProvider} from 'react-native-paper';
 
-declare const global: {HermesInternal: null | {}};
+import Search from './components/Search';
+import AppBar from './components/AppBar';
 
 const App = () => {
   return (
-    <>
-      <Text>hellooo meloo</Text>
-      <LotsOfGreetings />
-    </>
+    <PaperProvider>
+      <ScrollView style={styles.scrollView}>
+        <AppBar location={'Home'} />
+        <Search />
+      </ScrollView>
+      <DebugInstructions />
+    </PaperProvider>
   );
 };
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: Colors.lighter,
+    backgroundColor: Colors.primary,
   },
   engine: {
     position: 'absolute',
