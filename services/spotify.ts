@@ -1,4 +1,5 @@
-import {Artist} from 'mocks/artistsMock';
+import Artist from '../interfaces/Artist';
+import {IListItem} from '../interfaces/ListItem';
 
 const apiPrefix = 'https://api.spotify.com/v1';
 const apiTokenPrefix = 'https://accounts.spotify.com/api';
@@ -11,7 +12,6 @@ export const searchArtists = async (
   token: string,
 ): Promise<Artist[]> => {
   const uri = `${apiPrefix}/search?type=artist&limit=${limit}&offset=${offset}&q=${encodeURIComponent(q)}`;
-  console.log('search begin, uri =', uri, 'token =', token);
   const res = await fetch(uri, {
     method: 'GET',
     headers: {
@@ -19,7 +19,6 @@ export const searchArtists = async (
     },
   });
   const json = await res.json();
-  console.log('search got json', json);
 
   if (!res.ok) {
     return [];
@@ -29,15 +28,11 @@ export const searchArtists = async (
     artists: {items},
   } = json;
 
-  const mapped = items.map(
-    (item: {id: string; name: string; images: {url: string}[]}) => ({
+  const mapped = items.map((item: IListItem) => ({
     id: item.id,
     title: item.name,
-      imageUri: (item.images && item.images[0]?.url) || undefined,
-    }),
-  );
-
-  console.log('search mapped', mapped);
+    imageUri: (item.images && item.images[0]?.url) || undefined,
+  }));
 
   return mapped;
 };
@@ -46,9 +41,8 @@ export const searchArtists = async (
 export const getAlbums = async (
   artistId: string,
   token: string,
-): Promise<any> => {
+): Promise<IListItem[]> => {
   const uri = `${apiPrefix}/artists/${artistId}/albums`;
-  console.log('get albums request');
 
   try {
     const res = await fetch(uri, {
@@ -59,23 +53,16 @@ export const getAlbums = async (
     });
 
     const json = await res.json();
-    console.log('get albums success', json);
 
     const {items} = json;
-  
-    const mapped = items.map(
-      (item: {id: string; name: string; images: {url: string}[]}) => ({
+    const mapped = items.map((item: IListItem) => ({
       id: item.id,
       title: item.name,
-        imageUri: (item.images && item.images[0]?.url) || undefined,
-      }),
-    );
-  
-    console.log('albums mapped', mapped);
-  
+      imageUri: (item.images && item.images[0]?.url) || undefined,
+    }));
+
     return mapped;
   } catch (e) {
-    console.log('get albums failure', e);
     throw e;
   }
 };
@@ -83,9 +70,8 @@ export const getAlbums = async (
 export const getTopTracks = async (
   artistId: string,
   token: string,
-): Promise<any> => {
-  const uri = `${apiPrefix}/artists/${artistId}/top-tracks`;
-  console.log('get top tracks request');
+): Promise<IListItem[]> => {
+  const uri = `${apiPrefix}/artists/${artistId}/top-tracks?country=BG`;
 
   try {
     const res = await fetch(uri, {
@@ -96,17 +82,22 @@ export const getTopTracks = async (
     });
 
     const json = await res.json();
-    console.log('get top tracks success', json);
-    return json;
+    const {tracks} = json;
+
+    const mapped = tracks.map((item: IListItem) => ({
+      id: item.id,
+      title: item.name,
+      imageUri: (item.album.images && item.album.images[0]?.url) || undefined,
+    }));
+
+    return mapped;
   } catch (e) {
-    console.log('get top tracks failure', e);
     throw e;
   }
 };
 
 export const getToken = async (): Promise<string> => {
   try {
-    console.log('get token request');
     const res = await fetch(`${apiTokenPrefix}/token`, {
       method: 'POST',
       headers: {
@@ -115,12 +106,11 @@ export const getToken = async (): Promise<string> => {
       },
       body: 'grant_type=client_credentials',
     });
+
     const json = await res.json();
     const newToken = json.access_token;
-    console.log('get token success', newToken);
     return newToken;
   } catch (e) {
-    console.log('get token failure', e);
     throw e;
   }
 };
