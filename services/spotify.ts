@@ -26,16 +26,20 @@ export const searchArtists = async (
   }
 
   const {
-    tracks: {items},
+    artists: {items},
   } = json;
 
-  return items.map(
-    (item: {id: any; name: any; album: {images: {url: any}[]}}) => ({
+  const mapped = items.map(
+    (item: {id: string; name: string; images: {url: string}[]}) => ({
     id: item.id,
     title: item.name,
-      imageUri: item.album.images ? item.album.images[0].url : undefined,
+      imageUri: (item.images && item.images[0]?.url) || undefined,
     }),
   );
+
+  console.log('search mapped', mapped);
+
+  return mapped;
 };
 
 
@@ -100,7 +104,7 @@ export const getToken = async (): Promise<string> => {
     });
     const json = await res.json();
     const newToken = json.access_token;
-    console.log('get token success', res);
+    console.log('get token success', newToken);
     return newToken;
   } catch (e) {
     console.log('get token failure', e);
