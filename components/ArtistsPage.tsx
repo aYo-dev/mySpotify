@@ -5,7 +5,6 @@ import {Colors} from 'react-native/Libraries/NewAppScreen';
 import Search from './Search';
 import AppBar from './AppBar';
 import ResultList from './List';
-import searchMock from '../mocks/artistsMock';
 import Artist from '../interfaces/Artist';
 import * as spotifyService from '../services/spotify';
 
@@ -32,19 +31,9 @@ const ArtistPage = () => {
     })();
   }, []);
 
-  const getMockAtrists = async (q: string) => {
-    const newArtists = await searchMock({
-      offset: 10,
-      limit: 10,
-      q,
-    });
-
-    setArtists(newArtists);
-  };
-
   const getArtists = async () => {
     const newArtists = await spotifyService.searchArtists(1, 10, query, token);
-    // getMockAtrists(query);
+
     setArtists(newArtists);
   };
 
