@@ -60,7 +60,20 @@ export const getAlbums = async (
 
     const json = await res.json();
     console.log('get albums success', json);
-    return json;
+
+    const {items} = json;
+  
+    const mapped = items.map(
+      (item: {id: string; name: string; images: {url: string}[]}) => ({
+      id: item.id,
+      title: item.name,
+        imageUri: (item.images && item.images[0]?.url) || undefined,
+      }),
+    );
+  
+    console.log('albums mapped', mapped);
+  
+    return mapped;
   } catch (e) {
     console.log('get albums failure', e);
     throw e;

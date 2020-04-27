@@ -7,6 +7,7 @@ import AppBar from './AppBar';
 import ResultList from './List';
 import Artist from '../interfaces/Artist';
 import * as spotifyService from '../services/spotify';
+import {Actions} from 'react-native-router-flux';
 
 const styles = StyleSheet.create({
   container: {
@@ -43,14 +44,19 @@ const ArtistPage = () => {
   }, [query, token]);
 
   const handleShowAlbumsClicked = (artistId: string): void => {
-    console.log('go to albums page', artistId);
+    console.log('go to albums page', artistId, token);
+    Actions.albums({artistId, token});
   };
 
   return (
     <View style={styles.container}>
       <AppBar location={'Home'} />
       <Search onSearchChange={handleSearchChange} value={query} />
-      <ResultList items={artists} onShowAlbums={handleShowAlbumsClicked} />
+      <ResultList
+        items={artists}
+        onShowAlbums={handleShowAlbumsClicked}
+        hasActions={true}
+      />
     </View>
   );
 };

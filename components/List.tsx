@@ -33,7 +33,7 @@ const ActionButtons = (props: Record<string, any>): ReactElement => {
       <IconButton
         icon="music-box-outline"
         size={30}
-        onPress={props.onShowAlbums}
+        onPress={() => props.onShowAlbums(props.artistId)}
         color="white"
       />
     </View>
@@ -49,22 +49,27 @@ const ListItem = (props: Record<string, any>): ReactElement => {
       left={() => (
         <Image style={styles.image} source={{uri: props.item.imageUri}} />
       )}
-      right={() => (
+      right={() => props.hasActions ? (
         <ActionButtons
-          show={true}
           onShowAlbums={props.onShowAlbums}
           artistId={props.artistId}
         />
-      )}
+        ) : undefined
+      }
     />
   );
 };
 
-export default ({items, onShowAlbums}: any): ReactElement => (
+export default ({items, onShowAlbums, hasActions}: any): ReactElement => (
   <FlatList
     data={items}
     renderItem={({item}) => (
-      <ListItem item={item} onShowAlbums={onShowAlbums} />
+      <ListItem
+        item={item}
+        onShowAlbums={onShowAlbums}
+        artistId={item.id}
+        hasActions={hasActions}
+      />
     )}
     keyExtractor={(item) => item.id.toString()}
   />
