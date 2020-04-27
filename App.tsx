@@ -1,11 +1,11 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import {Provider as PaperProvider} from 'react-native-paper';
-import ArtistPage from './components/ArtistsPage';
-
+import Routes from './routes';
 
 const App = () => (
   <PaperProvider>
-    <ArtistPage />
+    <Routes />
   </PaperProvider>
 );
 
