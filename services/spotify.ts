@@ -1,6 +1,8 @@
 import {Artist} from 'mocks/artistsMock';
 
 const apiPrefix = 'https://api.spotify.com/v1';
+const apiTokenPrefix = 'https://accounts.spotify.com/api';
+const base64credentials = 'OGNmNTM4MGY1ODhjNGVhMTg4NDk2ZTI1NGVkNjM3NjA6MjZjZjkxMTg2ZDdlNDBhMWI1ZmVlY2Y0NDlmNzk4MWI=';
 
 export const searchArtists = async (
   offset: number,
@@ -84,9 +86,6 @@ export const getTopTracks = async (
     throw e;
   }
 };
-
-const apiTokenPrefix = 'https://accounts.spotify.com/api';
-const base64credentials = 'OGNmNTM4MGY1ODhjNGVhMTg4NDk2ZTI1NGVkNjM3NjA6MjZjZjkxMTg2ZDdlNDBhMWI1ZmVlY2Y0NDlmNzk4MWI=';
 
 export const getToken = async (): Promise<string> => {
   try {
