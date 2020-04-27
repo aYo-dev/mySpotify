@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native-paper';
 
 import Search from './Search';
 import AppBar from './AppBar';
@@ -10,7 +10,8 @@ import * as spotifyService from '../services/spotify';
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.cyan200,
+    flex: 1,
   },
 });
 
@@ -31,7 +32,7 @@ const ArtistPage = () => {
     })();
   }, []);
 
-  const getArtists = async () => {
+  const getArtists = async (): Promise<void> => {
     const newArtists = await spotifyService.searchArtists(1, 10, query, token);
 
     setArtists(newArtists);
@@ -41,11 +42,15 @@ const ArtistPage = () => {
     getArtists();
   }, [query, token]);
 
+  const handleShowAlbumsClicked = (artistId: string): void => {
+    console.log('go to albums page', artistId);
+  };
+
   return (
     <View style={styles.container}>
       <AppBar location={'Home'} />
       <Search onSearchChange={handleSearchChange} value={query} />
-      <ResultList items={artists} />
+      <ResultList items={artists} onShowAlbums={handleShowAlbumsClicked} />
     </View>
   );
 };
