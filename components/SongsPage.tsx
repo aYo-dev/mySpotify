@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Colors} from 'react-native-paper';
 
-import AppBar from './AppBar';
 import ResultList from './List';
 import * as spotifyService from '../services/spotify';
 
@@ -29,7 +28,6 @@ const SongsPage = (props: Record<string, any>) => {
 
   return (
     <View style={styles.container}>
-      <AppBar location={'Albums'} />
       <ResultList items={songs} />
     </View>
   );
