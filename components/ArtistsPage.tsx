@@ -3,7 +3,6 @@ import {StyleSheet, View} from 'react-native';
 import {Colors} from 'react-native-paper';
 
 import Search from './Search';
-import AppBar from './AppBar';
 import ResultList from './List';
 import Artist from '../interfaces/Artist';
 import * as spotifyService from '../services/spotify';
@@ -44,17 +43,20 @@ const ArtistPage = () => {
   }, [query, token]);
 
   const handleShowAlbumsClicked = (artistId: string): void => {
-    console.log('go to albums page', artistId, token);
     Actions.albums({artistId, token});
+  };
+
+  const handleShowTracksClicked = (artistId: string): void => {
+    Actions.songs({artistId, token});
   };
 
   return (
     <View style={styles.container}>
-      <AppBar location={'Home'} />
       <Search onSearchChange={handleSearchChange} value={query} />
       <ResultList
         items={artists}
         onShowAlbums={handleShowAlbumsClicked}
+        onShowTracks={handleShowTracksClicked}
         hasActions={true}
       />
     </View>

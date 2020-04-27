@@ -25,13 +25,13 @@ const ActionButtons = (props: Record<string, any>): ReactElement => {
   return (
     <View style={styles.buttonWrapper}>
       <IconButton
-        icon="album"
+        icon="music-box-outline"
         size={30}
-        onPress={() => console.log('Pressed')}
+        onPress={() => props.onShowTracks(props.artistId)}
         color="white"
       />
       <IconButton
-        icon="music-box-outline"
+        icon="album"
         size={30}
         onPress={() => props.onShowAlbums(props.artistId)}
         color="white"
@@ -52,6 +52,7 @@ const ListItem = (props: Record<string, any>): ReactElement => {
       right={() => props.hasActions ? (
         <ActionButtons
           onShowAlbums={props.onShowAlbums}
+          onShowTracks={props.onShowTracks}
           artistId={props.artistId}
         />
         ) : undefined
@@ -60,13 +61,19 @@ const ListItem = (props: Record<string, any>): ReactElement => {
   );
 };
 
-export default ({items, onShowAlbums, hasActions}: any): ReactElement => (
+export default ({
+  items,
+  onShowAlbums,
+  hasActions,
+  onShowTracks,
+}: any): ReactElement => (
   <FlatList
     data={items}
     renderItem={({item}) => (
       <ListItem
         item={item}
         onShowAlbums={onShowAlbums}
+        onShowTracks={onShowTracks}
         artistId={item.id}
         hasActions={hasActions}
       />
