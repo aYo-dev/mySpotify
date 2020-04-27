@@ -8,71 +8,67 @@
  * @format
  */
 
-import React from 'react';
-import {StyleSheet, ScrollView} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, View} from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 
 import {Provider as PaperProvider} from 'react-native-paper';
 
 import Search from './components/Search';
 import AppBar from './components/AppBar';
+import ResultList from './components/List';
+import searchMock from './mocks/artistsMock';
+import Artist from './interfaces/Artist';
+import * as spotifyService from './services/spotify';
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: Colors.primary,
+  },
+});
 
 const App = () => {
+  const [artists, setArtists] = useState([] as Artist[]);
+  const [query, setQuery] = useState('Shpongle');
+  const [token, setToken] = useState('');
+
+  const handleSearchChange = (artist: string) => {
+    console.log(artist);
+    setQuery(artist);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const newToken = await spotifyService.getToken();
+      setToken(newToken);
+    })();
+  }, [query]);
+
+  const getSongs = async (q: string) => {
+    const newArtists = await searchMock({
+      offset: 10,
+      limit: 10,
+      q,
+    });
+
+    setArtists(newArtists);
+  };
+
+  useEffect(() => {
+    // console.log('search');
+    getSongs(query);
+  }, [query]);
+
   return (
     <PaperProvider>
-      <ScrollView style={styles.scrollView}>
+      <View style={styles.container}>
         <AppBar location={'Home'} />
-        <Search />
-      </ScrollView>
-      <DebugInstructions />
+        <Search onSearchChange={handleSearchChange} value={query} />
+        <ResultList items={artists} />
+      </View>
     </PaperProvider>
   );
 };
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.primary,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
 
 export default App;
