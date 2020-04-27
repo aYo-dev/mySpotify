@@ -1,10 +1,15 @@
-import {Card, Avatar} from 'react-native-paper';
+import {Card} from 'react-native-paper';
 import React, {ReactElement} from 'react';
-import {FlatList, StyleSheet} from 'react-native';
+import {FlatList, StyleSheet, Image} from 'react-native';
 
 const styles = StyleSheet.create({
   avatar: {
     marginLeft: 20,
+  },
+  image: {
+    width: 50,
+    height: 50,
+    borderRadius: 10,
   },
 });
 
@@ -12,7 +17,9 @@ const ListItem = (props: Record<string, any>): ReactElement => {
   return (
     <Card.Title
       title={props.item.title}
-      left={() => <Avatar.Image source={props.item.imageUri} size={54} />}
+      left={() => (
+        <Image style={styles.image} source={{uri: props.item.imageUri}} />
+      )}
       titleStyle={styles.avatar}
     />
   );

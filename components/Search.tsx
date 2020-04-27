@@ -1,4 +1,4 @@
-import React, {ReactElement, Props} from 'react';
+import React, {ReactElement} from 'react';
 import {Searchbar} from 'react-native-paper';
 
 interface SearchProps {
